@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+<!-- 数据持久层的配置文件 -->
+<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<!-- 最大连接数据库连接数，设置0为没有限制 -->
+		<property name="maxActive" value="10"></property>	
+		<!-- 最小连接池数量 -->
+		<property name="minIdle" value="5"></property>
+	</bean>
+	
+	  <!-- 自动产生SqlSessionFactory的对象 -->
+	  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <!-- 指定配置主文件的位置 -->
+	  <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"></property>
+	  <!-- 注入数据源 -->
+	  <property name="dataSource" ref="dataSource"></property>
+	  <!-- 指定mapper映射文件的位置 -->
+	  <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
+	  <!-- 指定别名 -->
+	  <property name="typeAliasesPackage" value="com.hry.pojo"></property>
+	  
+	  </bean>
+	  
+	  <!-- 配置mapper扫描,实例化数据持久层 -->
+	  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  <!-- 指定需要扫描的包 -->
+	  <property name="basePackage" value="com.hry.mapper"></property>
+	  <!-- 注入SqlSessionFactory -->
+	  <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	  </bean>
+
+</beans>
