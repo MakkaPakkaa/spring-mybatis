@@ -28,7 +28,7 @@ public class UserTest {
 	
 	@Test
 	public void testDel() {
-		us.delUserById(1);
+		us.delUserById(15);
 	}
 	
 	@Test
@@ -54,7 +54,7 @@ public class UserTest {
 	@Test
 	public void testId() {
 		
-		User user = us.selectUserById(2);
+		User user = us.selectUserById(17);
 		System.out.println(user);
 	}
 }
